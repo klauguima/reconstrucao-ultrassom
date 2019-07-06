@@ -1,4 +1,7 @@
 class MatrixUtil {
+    MatrixUtil() {
+
+    }
     [string] testar() {
         return ("aaabb")
     }
