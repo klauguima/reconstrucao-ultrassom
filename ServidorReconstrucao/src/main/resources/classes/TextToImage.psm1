@@ -28,7 +28,7 @@
     [void] cgne() {
         [System.Collections.ArrayList]$fMatrix=@{}
 
-        foreach($line in $this.gMatrix) {
+        foreach($line in $this.hMatrix[0]) {
             [System.Collections.ArrayList]$zeroArray=@{}
             $zeroArray.Add(0) | Out-Null
             $fMatrix.Add($zeroArray) | Out-Null
