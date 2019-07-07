@@ -13,18 +13,32 @@ class MatrixUtil {
         } else {
             $sum = [float]0
             for ($c=0; $c -lt $numRowsA; $c++) {
-                $matrixResult.Add(@{})
+                $matrixResult.Add([System.Collections.ArrayList]@{})
+
                 for ($d=0; $d -lt $numColumnsB; $d++) {
                     for ($k=0; $k -lt $numRowsB; $k++) {
 						$sum = $sum + [float]$matrixA[$c][$k] * [float]$matrixB[$k][$d];
                     }
-					$matrixResult[$c][$d] = $sum;
+					$matrixResult[$c].Add($sum);
 					$sum = [float]0;
                 }
             }
         }
 
         return ($matrixResult)
+    }
+
+    [string] display([System.Collections.ArrayList]$matrix) {
+        $retorno = ""
+
+        foreach($line in $matrix) {
+            foreach($column in $line) {
+                $retorno = $retorno + $column + "`t"
+            }
+            $retorno = $retorno + "`n"
+        }
+        
+        return $retorno
     }
 }
 
