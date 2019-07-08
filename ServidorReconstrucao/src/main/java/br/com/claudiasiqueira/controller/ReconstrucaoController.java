@@ -19,11 +19,15 @@ public class ReconstrucaoController {
 	public void reconstruir(String hFilePath) throws IOException {
 		PowerShell powerShell = new PowerShell();
 
-	    String tempPathImage = File.createTempFile("image1", ".bmp").getAbsolutePath();
+		String tempPathImage = File.createTempFile("image1", ".bmp").getAbsolutePath();
 
-		powerShell.setParameters("-outputImagePath " + tempPathImage);
+		String parameters = "-outputImagePath " + tempPathImage;
+		if(hFilePath != null && hFilePath != "") {
+			parameters += " -hFilePath " + hFilePath;
+		}
+		powerShell.setParameters(parameters);
 		powerShell.executar("Reconstrucao.ps1");
-		
+
 		new OutputUtils(this.response).writeOutputFile(tempPathImage);
 	}
 
