@@ -1,18 +1,14 @@
-﻿## VARIABLES
-$hFilePath = "C:\Users\Kleber\Documents\projetos\claudia-faculdade\Imagem\H-1.txt"
-$gFilePath = "C:\Users\Kleber\Documents\projetos\claudia-faculdade\Imagem\g-1.txt"
-$testeFilePath = "C:\Users\Kleber\Documents\projetos\claudia-faculdade\Imagem\teste.txt"
+﻿## PARAMS
+param (
+   [string]$hFilePath = "C:\Users\Kleber\Documents\projetos\claudia-faculdade\Imagem\H-teste.txt",
+   [string]$gFilePath = "C:\Users\Kleber\Documents\projetos\claudia-faculdade\Imagem\g-teste2.txt"
+)
 
-[System.Collections.ArrayList]$arrValuesG=@{}
+Import-Module -Force '.\classes\TextToImage.psm1'
+Import-Module -Force '.\classes\MatrixUtil.psm1'
+Import-Module -Force '.\classes\ImageCreator.psm1'
 
-## FUNCTIONS
-function readHFile {
-    foreach($line in [System.IO.File]::ReadLines($testeFilePath)) {
-        $elements=$line.split(",")
-        $arrValuesG.Add($elements) | Out-Null
-    }
-}
+$textToImage = Get-TextToImage $hFilePath $gFilePath
+$textToImage.main()
 
-readHFile
-Write-Output $arrValuesG
 Write-Output "Tudo certo"

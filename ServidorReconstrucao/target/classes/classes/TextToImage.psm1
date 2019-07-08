@@ -2,16 +2,14 @@
     ## ATRIBUTES
     [string]$hFilePath
     [string]$gFilePath
-    [string]$outputImagePath
     [System.Collections.ArrayList]$gMatrix=@{}
     [System.Collections.ArrayList]$hMatrix=@{}
     
 
     ## CONSTRUCTOR
-    TextToImage([string]$hFilePath, [string]$gFilePath, [string] $outputImagePath) {
+    TextToImage([string]$hFilePath, [string]$gFilePath) {
         $this.hFilePath = $hFilePath
         $this.gFilePath = $gFilePath
-        $this.outputImagePath = $outputImagePath
     }
 
     ## FUNCTIONS
@@ -42,13 +40,13 @@
         #$this.readHFile()
         #return $this.cgne()
 
-        $imageCreator = Get-ImageCreator $this.outputImagePath
+        $imageCreator = Get-ImageCreator
         $imageCreator.createImage($this.gMatrix)
     }
 }
 
-function Get-TextToImage([string]$hFilePath, [string]$gFilePath, [string]$outputImagePath) {
-    return [TextToImage]::new($hFilePath, $gFilePath, $outputImagePath)
+function Get-TextToImage([string]$hFilePath, [string]$gFilePath) {
+    return [TextToImage]::new($hFilePath, $gFilePath)
 }
 
 Export-ModuleMember -Function Get-TextToImage

@@ -127,6 +127,7 @@ public class TextToImagem {
 			for (int j = 0; j < 60; j++) {
 				int value = (int) ((255 / (max - min)) * (matrix[k][0] - min));
 				theImage.setRGB(i, j, value);
+				k++;
 			}
 		}
 		File outputfile = new File(imagemDestino);
