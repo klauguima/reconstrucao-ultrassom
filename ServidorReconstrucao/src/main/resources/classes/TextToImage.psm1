@@ -37,14 +37,18 @@
         return $matrixUtil.display($resultMatrix);
     }
 
+    [void] createImage() {
+        $imageCreator = Get-ImageCreator $this.outputImagePath
+        $imageCreator.createImage($this.gMatrix)
+    }
+
     [void] main() {
         $this.readGFile()
         #$this.readHFile()
         #return $this.cgne()
-
-        $imageCreator = Get-ImageCreator $this.outputImagePath
-        $imageCreator.createImage($this.gMatrix)
+        $this.createImage()
     }
+
 }
 
 function Get-TextToImage([string]$hFilePath, [string]$gFilePath, [string]$outputImagePath) {
