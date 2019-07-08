@@ -19,7 +19,6 @@
         }
         
         $k = 0
-        [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing")
         $bmp = New-Object System.Drawing.Bitmap(320, 240)
         for ($i = 0; $i -lt 60; $i++) {
            for ($j = 0; $j -lt 60; $j++) {

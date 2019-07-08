@@ -20,16 +20,9 @@ public class ReconstruirImagem extends HttpServlet {
 
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		PrintWriter saida = resp.getWriter();
-		
 		String hFilePath = req.getParameter("hFilePath");
 		
-		new ReconstrucaoController().reconstruir(hFilePath);
-
-		Map<String, Object> retorno = new HashMap<>();
-		retorno.put("sucesso", true);
-		
-		saida.write(new Gson().toJson(retorno));
+		new ReconstrucaoController(resp).reconstruir(hFilePath);
 	}
 
 }

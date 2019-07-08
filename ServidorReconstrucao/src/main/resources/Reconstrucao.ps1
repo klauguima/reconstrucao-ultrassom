@@ -5,9 +5,10 @@ param (
    [string]$outputImagePath = "C:\Users\Kleber\Documents\projetos\claudia-faculdade\Imagem\img1.bmp"
 )
 
-Import-Module -Force '.\classes\TextToImage.psm1'
-Import-Module -Force '.\classes\MatrixUtil.psm1'
-Import-Module -Force '.\classes\ImageCreator.psm1'
+Add-Type -Assembly System.Drawing
+Import-Module -Force "$($PSScriptRoot)\classes\TextToImage.psm1"
+Import-Module -Force "$($PSScriptRoot)\classes\MatrixUtil.psm1"
+Import-Module -Force "$($PSScriptRoot)\classes\ImageCreator.psm1"
 
 $textToImage = Get-TextToImage $hFilePath $gFilePath $outputImagePath
 $textToImage.main()
