@@ -17,11 +17,13 @@
 				$min = [float]$line[0];
 			}
         }
-        
+
+        $dimension = [int][math]::floor([math]::Sqrt($matrix.Count));
+
         $k = 0
-        $bmp = New-Object System.Drawing.Bitmap(320, 240)
-        for ($i = 0; $i -lt 60; $i++) {
-           for ($j = 0; $j -lt 60; $j++) {
+        $bmp = New-Object System.Drawing.Bitmap($dimension, $dimension)
+        for ($i = 0; $i -lt $dimension; $i++) {
+           for ($j = 0; $j -lt $dimension; $j++) {
            	 $value = [int] ((255 / ($max - $min)) * ($matrix[$k][0] - $min));
              $bmp.SetPixel($i, $j, [System.Drawing.Color]::FromArgb($value, $value, $value))
              $k++
