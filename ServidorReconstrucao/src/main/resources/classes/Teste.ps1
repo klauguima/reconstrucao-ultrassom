@@ -1,4 +1,9 @@
-﻿[System.Collections.ArrayList]$matrixA = @{}
+﻿
+$a = [int][math]::Sqrt(3610);
+Write-Output $a
+
+exit
+[System.Collections.ArrayList]$matrixA = @{}
 [System.Collections.ArrayList]$matrixB = @{}
 
 [System.Collections.ArrayList]$matrix1 = @{}
@@ -17,27 +22,27 @@
 $mZero.Add(0) | Out-Null
 
 $matrix1.Add(1) | Out-Null
-$matrix1.Add(2) | Out-Null
-$matrix1.Add(3) | Out-Null
+$matrix1.Add(1) | Out-Null
+$matrix1.Add(1) | Out-Null
 $matrixA.Add($matrix1) | Out-Null
 
 $matrix2.Add(4) | Out-Null
 $matrix2.Add(5) | Out-Null
 $matrix2.Add(6) | Out-Null
-$matrixA.Add($matrix2) | Out-Null
+$matrixA.Add($matrix1) | Out-Null
 
 $matrix3.Add(7) | Out-Null
 $matrix3.Add(8) | Out-Null
 $matrix3.Add(9) | Out-Null
-$matrixA.Add($matrix3) | Out-Null
+$matrixA.Add($matrix1) | Out-Null
 
-$matrixB.Add($matrix3) | Out-Null
-$matrixB.Add($matrix2) | Out-Null
+$matrixB.Add($mZero) | Out-Null
+$matrixB.Add($mZero) | Out-Null
 $matrixB.Add($matrix1) | Out-Null
 
 
-Import-Module -Force '.\classes\MatrixUtil.psm1'
+Import-Module -Force "$($PSScriptRoot)\MatrixUtil.psm1"
 
 $matrixUtil = Get-MatrixUtil
-$resultMatrix = $matrixUtil.subtract($matrixA, $matrixB)
+$resultMatrix = $matrixUtil.matrixMultTranpose($matrixA, $matrixB)
 $matrixUtil.display($resultMatrix);
