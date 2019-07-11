@@ -1,11 +1,12 @@
 package br.com.claudiasiqueira.model;
 
-public class Usuarios {
+public class Usuario {
 	private String nome;
 	private String cpf;
 	private String email;
 	private String senha;
 	private String nickName;
+	private int id;
 
 	public String getNome() {
 		return nome;
@@ -45,6 +46,14 @@ public class Usuarios {
 
 	public void setNickName(String nickName) {
 		this.nickName = nickName;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 }

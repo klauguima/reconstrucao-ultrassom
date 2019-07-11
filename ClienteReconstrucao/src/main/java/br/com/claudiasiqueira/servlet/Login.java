@@ -19,12 +19,12 @@ import br.com.claudiasiqueira.controller.LoginController;
 public class Login extends HttpServlet {
 
 	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		PrintWriter saida = resp.getWriter();
-		String login = req.getParameter("usuario");
-		String senha = req.getParameter("senha");
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		PrintWriter saida = response.getWriter();
+		String login = request.getParameter("usuario");
+		String senha = request.getParameter("senha");
 		
-		LoginController loginController = new LoginController();
+		LoginController loginController = new LoginController(request);
 		boolean acesso = loginController.verificarLogin(login, senha);
 		
 		Map<String, Object> retorno = new HashMap<String, Object>();

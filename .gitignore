@@ -2,3 +2,5 @@
 Servers/
 CProject/
 ServidorReconstrucao/target/
+ServidorReconstrucao/.settings/org.eclipse.jdt.core.prefs
+ServidorReconstrucao/.classpath

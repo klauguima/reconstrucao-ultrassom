@@ -10,14 +10,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import br.com.claudiasiqueira.controller.ReconstrucaoController;
 
-@WebServlet("/reconstruir_imagem")//url que esta sendo chamada
-public class ReconstruirImagem extends HttpServlet {
-
+@WebServlet("/reconstruir")
+public class TesteUpload extends HttpServlet {
 	@Override
-	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String hFilePath = req.getParameter("hFilePath");
-		
-		new ReconstrucaoController(resp).reconstruir(hFilePath);
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		System.out.println("teste");
 	}
-
 }

@@ -7,6 +7,8 @@ import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
 
+import br.com.claudiasiqueira.model.Usuario;
+
 public class UsuarioDB {
 
 //	public void inserirUsuario() {
@@ -16,10 +18,12 @@ public class UsuarioDB {
 //		String sql = "insert	into usuarios" + "	(id,nome,cpf,senha,email)" + "	values	(?,?,?,?)";
 //	}
 
-	public boolean consultarUsuario(String login, String senha) {
+	public Usuario consultarUsuario(String login, String senha) {
 		boolean autenticado = false;
 		String sql;
-		String acesso;
+		
+		Usuario usuario = null;
+		
 		try {
 
 			Connection conn = new Conexao().conectarBD();
@@ -34,15 +38,21 @@ public class UsuarioDB {
 
 			ResultSet result = statement.executeQuery();
 			if (result.next()) {
-				acesso = result.getString("usuario_id");
-				autenticado = true;
+				usuario = new Usuario();
+				
+				int usuario_id = result.getInt("usuario_id");
+				String usuario_nickname = result.getString("usuario_nickname");
+				
+				usuario.setId(usuario_id);
+				usuario.setNickName(usuario_nickname);
+				
 			}
 			statement.close();
-			return autenticado;
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		}
-		return autenticado;
+		return usuario;
+		
 	}
 
 }
