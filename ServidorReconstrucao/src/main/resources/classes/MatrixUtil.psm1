@@ -56,19 +56,22 @@ class MatrixUtil {
 		$numColumnsB = $matrixB[0].Count
         $numRowsB = $matrixB.Count
         
-        for ($i=0; $i -lt $numRowsA; $i++) {
-            for ($j=0; $j -lt $numColumnsA; $j++) {
-                $total = 0
-				if ($numRowsB -gt $i -and $numColumnsB -gt $j) {
+        
+        Write-Verbose -Message "Subtraindo" -Verbose
+        Write-Verbose -Message "numColumnsA $($numColumnsA) numRowsA $($numRowsA) numColumnsB $($numColumnsB) numRowsB $($numRowsB)" -Verbose
+
+        if ($numColumnsA -ne $numColumnsB -or $numRowsA -ne $numRowsB) {
+            throw "As matrixes não podem ser subtraidas"
+        } else { 
+            for ($i=0; $i -lt $numRowsA; $i++) {
+                for ($j=0; $j -lt $numColumnsA; $j++) {
 					$total = [float]$matrixA[$i][$j] - [float]$matrixB[$i][$j];
-                } else {
-                    $total = [float]$matrixA[$i][$j]
+
+                    if($matrixResult.Count -le $i) {
+                        $matrixResult.Add([System.Collections.ArrayList]@{})
+                    }
+				    $matrixResult[$i].Add($total)
                 }
-                
-                if($matrixResult.Count -le $i) {
-                    $matrixResult.Add([System.Collections.ArrayList]@{})
-                }
-				$matrixResult[$i].Add($total)
             }
         }
         return ($matrixResult)
@@ -84,19 +87,21 @@ class MatrixUtil {
 		$numColumnsB = $matrixB[0].Count
         $numRowsB = $matrixB.Count
         
-        for ($i=0; $i -lt $numRowsA; $i++) {
-            for ($j=0; $j -lt $numColumnsA; $j++) {
-                $total = 0
-				if ($numRowsB -gt $i -and $numColumnsB -gt $j) {
+        Write-Verbose -Message "Somando" -Verbose
+        Write-Verbose -Message "numColumnsA $($numColumnsA) numRowsA $($numRowsA) numColumnsB $($numColumnsB) numRowsB $($numRowsB)" -Verbose
+
+        if ($numColumnsA -ne $numColumnsB -or $numRowsA -ne $numRowsB) {
+            throw "As matrixes não podem ser somadas"
+        } else { 
+            for ($i=0; $i -lt $numRowsA; $i++) {
+                for ($j=0; $j -lt $numColumnsA; $j++) {
 					$total = [float]$matrixA[$i][$j] + [float]$matrixB[$i][$j];
-                } else {
-                    $total = [float]$matrixA[$i][$j]
-                }
                 
-                if($matrixResult.Count -le $i) {
-                    $matrixResult.Add([System.Collections.ArrayList]@{})
+                    if($matrixResult.Count -le $i) {
+                        $matrixResult.Add([System.Collections.ArrayList]@{})
+                    }
+				    $matrixResult[$i].Add($total)
                 }
-				$matrixResult[$i].Add($total)
             }
         }
         return ($matrixResult)
@@ -124,6 +129,10 @@ class MatrixUtil {
         return ($matrixResult)
     }
     
+    [System.Collections.ArrayList] transposeAndMultiply([System.Collections.ArrayList]$matrixA, [System.Collections.ArrayList]$matrixB) {
+        return ($this.multiply($this.transpose($matrixA), $matrixB))
+    }
+
     [System.Collections.ArrayList] transpose([System.Collections.ArrayList]$matrix) {
         [System.Collections.ArrayList]$matrixResult = @{}
                 
@@ -141,8 +150,8 @@ class MatrixUtil {
 
     [System.Collections.ArrayList] getZeroMatrix([System.Collections.ArrayList]$matrix) {
         [System.Collections.ArrayList]$zeroMatrix = @{}
-
-        foreach($line in $matrix) {
+        
+        foreach($column in $matrix[0]) {
             [System.Collections.ArrayList]$zeroLine = @{}
             $zeroLine.Add(0);
             $zeroMatrix.Add($zeroLine);

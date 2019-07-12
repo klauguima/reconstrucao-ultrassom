@@ -1,7 +1,7 @@
 ﻿## PARAMS
 param (
    [string]$hFilePath = "C:\Users\Kleber\Documents\projetos\claudia-faculdade\Imagem\H-1.txt",
-   [string]$gFilePath = "C:\Users\Kleber\Documents\projetos\claudia-faculdade\Imagem\g-1.txt",
+   [string]$gFilePath = "C:\Users\Kleber\Documents\projetos\claudia-faculdade\Imagem\g-2.txt",
    [string]$outputImagePath = "C:\Users\Kleber\Documents\projetos\claudia-faculdade\Imagem\img1.bmp"
 )
 
