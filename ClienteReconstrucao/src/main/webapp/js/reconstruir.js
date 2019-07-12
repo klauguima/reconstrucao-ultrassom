@@ -24,10 +24,30 @@ $(function() {
 	    $.ajax({
 	    	data: data,
 	        type: "POST",
-	        url: "http://localhost:8080/ServidorReconstrucao/reconstruir",
+	        url: "http://localhost:8080/ClienteReconstrucao/reconstruir",
 	        contentType: contentType,
 	        processData: processData,
-	        success: function (response) {}
+	        dataType: "json",
+	        success: function (response) {
+	        	$("#retorno").html("<p>Dados da Reconstrução</p>" +
+	        			"<p> Identificação do usuário: "+response.usuario.nickName+"</p>" +
+	        			"<p>Data e hora do início da reconstrução: "+response.dtHoraInicio.dayOfMonth+"/"
+	        														+(response.dtHoraInicio.month+1)+"/"
+	        														+response.dtHoraInicio.year+", "
+	        														+response.dtHoraInicio.dayOfMonth+": "
+	        														+response.dtHoraInicio.minute+": "
+	        														+response.dtHoraInicio.second+"</p>"+
+	        			"<p>Data e hora do término da reconstrução: "+response.dtHoraFim.dayOfMonth+"/"
+	        														+(response.dtHoraFim.month+1)+"/"
+	        														+response.dtHoraFim.year+", "
+	        														+response.dtHoraFim.dayOfMonth+": "
+	        														+response.dtHoraFim.minute+": "
+	        														+response.dtHoraFim.second+"</p>"+
+	        			"<p>Tamanho em pixels: "+response.tamPixels.altura+"x"+response.tamPixels.largura+"</p>" +
+	        			"<p>O número de iterações executadas: "+response.numIteracoes+"</p>"+
+	        			"<img src='http://localhost:8080/ClienteReconstrucao/imagerender?caminhoImagem="
+	        																+response.caminhoImagem.replace(/\\/g, '/')+"'>");
+	        }
 	    });
 	});
 });
