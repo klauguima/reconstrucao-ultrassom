@@ -13,7 +13,7 @@ public class LoginController {
 
 	public LoginController(HttpServletRequest request) {
 		this.request = request;
-		session = request.getSession();
+		session = request.getSession(true);
 	}
 
 	public boolean verificarLogin(String login, String senha) {

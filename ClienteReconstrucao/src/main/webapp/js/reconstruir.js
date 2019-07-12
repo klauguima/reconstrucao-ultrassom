@@ -6,6 +6,14 @@ $(function() {
 						.html(fileName);
 			});
 	
+	$("#form-reconstrucao").submit(function() {
+	    if($("#filename").val()== null || $("#filename").val() ==""){
+	        alert('campo vazio');      
+	        return false;
+	    }
+	});
+	
+	$
 	// $("#meuFormulario").on("submit", function() {})
 	$('#form-reconstrucao').submit(function (evento) {
 		evento.preventDefault();
