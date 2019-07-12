@@ -1,8 +1,22 @@
-﻿
-$a = [int][math]::Sqrt(3610);
-Write-Output $a
+﻿[System.Collections.ArrayList]$matrix = @{}
+foreach($line in [System.IO.File]::ReadLines("C:\Users\Kleber\Documents\projetos\claudia-faculdade\Imagem\teste.txt")) {
+    if($line -ne "" -and $line) {
+        $matrix.Add($line.split(","))
+        Write-Output $line
+        Write-Output "-----"
+    }
+    break
+}
+
+Import-Module -Force "$($PSScriptRoot)\MatrixUtil.psm1"
+
+$matrixUtil = Get-MatrixUtil
+#Write-Output $matrixUtil.display($matrix)
 
 exit
+
+
+
 [System.Collections.ArrayList]$matrixA = @{}
 [System.Collections.ArrayList]$matrixB = @{}
 
