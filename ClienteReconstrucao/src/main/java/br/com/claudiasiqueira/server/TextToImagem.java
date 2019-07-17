@@ -12,25 +12,17 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import br.com.claudiasiqueira.matrix.MatrixUtil;
+import org.jblas.FloatMatrix;
 
 public class TextToImagem {
 
-	public static void main(String[] args) {
-		try {
-			TextToImagem textToImagem = new TextToImagem();
-			textToImagem.criaImagem();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-//	Integer width = 50816;
-	Integer height = 3600;
-	Integer width = 1000;
+	Integer rowsH = 50816;
+	Integer colunsH = 3600;
+	Integer rowsG = 50816;
+	Integer colunsG = 1;
 	
-	private Float[][] hMatrix = new Float[width][height];
-	private Float[][] gMatrix = new Float[width][1];
+	private FloatMatrix hMatrix = new FloatMatrix(rowsH, colunsH);
+	private FloatMatrix gMatrix = new FloatMatrix(rowsG, colunsG);
 
 	private String caminhoArquivoG = "C:\\Users\\Kleber\\Documents\\projetos\\claudia-faculdade\\Imagem\\g-1.txt";
 	private String caminhoArquivoH = "C:\\Users\\Kleber\\Documents\\projetos\\claudia-faculdade\\Imagem\\H-1.txt";
@@ -40,97 +32,94 @@ public class TextToImagem {
 		System.out.println("iniciou");
 		readHFile();
 		readGFile();
-		Float[][] matrix = cgne();
+		FloatMatrix matrix = cgne();
 		montaImagem(matrix);
 
-		System.out.println("Concluído!");
+		System.out.println("Concluï¿½do!");
 	}
 
 	private void readGFile() throws FileNotFoundException, IOException {
 		BufferedReader bufferG = new BufferedReader(new FileReader(caminhoArquivoG));
-		String lineG = "";
 
-		for (int j = 0; j < width; j++) {
+		for (int j = 0; j < rowsG; j++) {
 			String line = bufferG.readLine();
-			gMatrix[j][0] = Float.parseFloat(line);
+			gMatrix.put(j, 0, Float.parseFloat(line));
 		}
 		bufferG.close();
 	}
 
 	private void readHFile() throws FileNotFoundException, IOException {
 		BufferedReader bufferH = new BufferedReader(new FileReader(caminhoArquivoH));
-		for (int i = 0; i < width; i++) {
+		System.out.println("Lendo arquivo H");
+		for (int i = 0; i < rowsH; i++) {
 			String line = bufferH.readLine();
 			if (line != null && line != "") {
 				String[] arrayLine = line.split(",");
-				for (int j = 0; j < height; j++) {
-					hMatrix[i][j] = Float.parseFloat(arrayLine[j]);
+				for (int j = 0; j < colunsH; j++) {
+					gMatrix.put(i, j, Float.parseFloat(arrayLine[j]));
 				}
 			}
-//			System.out.println(i);
 		}
+		System.out.println("Terminou de ler o arquivo H");
 		bufferH.close();
 	}
 
-	private Float[][] cgne() throws Exception {
-		Float[][] fMatrix = new Float[height][1];
-		for (int i = 0; i < height; i++) {
-			fMatrix[i][0] = 0.0f;
-		}
+	private FloatMatrix cgne() throws Exception {
+		FloatMatrix fMatrix = FloatMatrix.zeros(colunsH, 1);
+		
+		/**
+		 * FÃ³rmula: r0 = g - Hf0
+		 */
+		FloatMatrix rMatrix = gMatrix;
 
 		/**
-		 * Fórmula: r0 = g - Hf0
+		 * FÃ³rmula: p0 = HTr0
 		 */
-		Float[][] resultMatrix = MatrixUtil.subtract(gMatrix, MatrixUtil.multiply(hMatrix, fMatrix));
-
-		/**
-		 * Fórmula: p0 = HTr0
-		 */
-		Float[][] pMatrix = MatrixUtil.matrixMultTranpose(hMatrix, resultMatrix);
+		FloatMatrix pMatrix = hMatrix.transpose().mmul(rMatrix);
 
 		Float alpha, beta;
 		/**
-		 * Fórmula: riT * ri
+		 * FÃ³rmula: riT * ri
 		 */
-		Float rtXr = (MatrixUtil.multiply(MatrixUtil.transpose(resultMatrix), resultMatrix))[0][0];
+		Float rtXr = rMatrix.transpose().mmul(rMatrix).get(0, 0);
+
 		Float ritXri;
-		Float[][] ri;
-//        for(int i = 0; i < 15; i++) {
+		FloatMatrix ri;
 		for (int i = 0; i < 5; i++) {
-			alpha = rtXr / (MatrixUtil.multiply(MatrixUtil.transpose(pMatrix), pMatrix))[0][0];// ai = riT * ri / piT * pi
-			fMatrix = MatrixUtil.sum(fMatrix, MatrixUtil.multiply(pMatrix, alpha));// fi+1 = fi + ai * pi
-			ri = MatrixUtil.subtract(resultMatrix, MatrixUtil.multiply(MatrixUtil.multiply(hMatrix, pMatrix), alpha));// ri+1 = ri - ai * H * pi
-			ritXri = (MatrixUtil.multiply(MatrixUtil.transpose(ri), ri))[0][0];// =ri+1T * ri+1
+			alpha = rtXr / pMatrix.transpose().mmul(pMatrix).get(0, 0); // ai = riT * ri / piT * pi
+			fMatrix = pMatrix.mmul(alpha).add(fMatrix);// fi+1 = fi + ai * pi
+			ri = hMatrix.mmul(pMatrix).mmul(alpha).rsub(rMatrix);// ri+1 = ri - ai * H * pi
+			ritXri = ri.transpose().mmul(ri).get(0, 0);// =ri+1T * ri+1
 			beta = ritXri / rtXr;// Bi = ri+1T * ri+1 / riT * ri
-			pMatrix = MatrixUtil.sum(MatrixUtil.matrixMultTranpose(hMatrix, ri), MatrixUtil.multiply(pMatrix, beta));// pi = HT * ri+1 + Bi * pi
-			resultMatrix = ri;// ri = ri+1
+			pMatrix = hMatrix.transpose().mmul(ri).add(pMatrix.mmul(beta));// pi = HT * ri+1 + Bi * pi
+			rMatrix = ri;// ri = ri+1
 			rtXr = ritXri;
 		}
 		return fMatrix;
 	}
 
-	private void montaImagem(Float[][] matrix) throws IOException {
-		Float max = matrix[0][0];
-		Float min = matrix[0][0];
-		for (int i = 0; i < height; i++) {
-			if (matrix[i][0] > max) {
-				max = matrix[i][0];
-			}
-			if (matrix[i][0] < min) {
-				min = matrix[i][0];
-			}
-		}
-
-		BufferedImage theImage = new BufferedImage(60, 60, BufferedImage.TYPE_INT_RGB);
-		int k = 0;
-		for (int i = 0; i < 60; i++) {
-			for (int j = 0; j < 60; j++) {
-				int value = (int) ((255 / (max - min)) * (matrix[k][0] - min));
-				theImage.setRGB(i, j, value);
-				k++;
-			}
-		}
-		File outputfile = new File(imagemDestino);
-		ImageIO.write(theImage, "jpg", outputfile);
+	private void montaImagem(FloatMatrix matrix) throws IOException {
+//		Float max = matrix[0][0];
+//		Float min = matrix[0][0];
+//		for (int i = 0; i < height; i++) {
+//			if (matrix[i][0] > max) {
+//				max = matrix[i][0];
+//			}
+//			if (matrix[i][0] < min) {
+//				min = matrix[i][0];
+//			}
+//		}
+//
+//		BufferedImage theImage = new BufferedImage(60, 60, BufferedImage.TYPE_INT_RGB);
+//		int k = 0;
+//		for (int i = 0; i < 60; i++) {
+//			for (int j = 0; j < 60; j++) {
+//				int value = (int) ((255 / (max - min)) * (matrix[k][0] - min));
+//				theImage.setRGB(i, j, value);
+//				k++;
+//			}
+//		}
+//		File outputfile = new File(imagemDestino);
+//		ImageIO.write(theImage, "jpg", outputfile);
 	}
 }

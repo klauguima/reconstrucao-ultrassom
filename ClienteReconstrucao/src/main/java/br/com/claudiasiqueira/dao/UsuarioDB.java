@@ -11,13 +11,6 @@ import br.com.claudiasiqueira.model.Usuario;
 
 public class UsuarioDB {
 
-//	public void inserirUsuario() {
-//
-//		Connection conn = new Conexao().conectarBD();
-//
-//		String sql = "insert	into usuarios" + "	(id,nome,cpf,senha,email)" + "	values	(?,?,?,?)";
-//	}
-
 	public Usuario consultarUsuario(String login, String senha) {
 		boolean autenticado = false;
 		String sql;
