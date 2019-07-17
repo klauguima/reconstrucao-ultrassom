@@ -18,17 +18,16 @@ import br.com.claudiasiqueira.controller.ReconstrucaoController;
 import br.com.claudiasiqueira.utils.FileUtils;
 
 @WebServlet("/reconstruir")
-//@MultipartConfig
+@MultipartConfig
 public class ArquivoUpload extends HttpServlet {
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		PrintWriter writer = response.getWriter();
-//		final Part filePart = request.getPart("arquivo");
-//		String caminhoArquivo = FileUtils.gravarArquivoTemporario(filePart);
+		final Part filePart = request.getPart("arquivo");
+		String caminhoArquivo = FileUtils.gravarArquivoTemporario(filePart);
 
-//		Map<String, Object> retorno = new ReconstrucaoController(request).reconstruir(caminhoArquivo);
-		Map<String, Object> retorno = new ReconstrucaoController(request).reconstruir("");
+		Map<String, Object> retorno = new ReconstrucaoController(request).reconstruir(caminhoArquivo);
 		writer.write(new Gson().toJson(retorno));
 	}
 
