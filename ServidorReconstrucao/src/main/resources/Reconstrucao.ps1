@@ -11,6 +11,6 @@ Import-Module -Force "$($PSScriptRoot)\classes\MatrixUtil.psm1"
 Import-Module -Force "$($PSScriptRoot)\classes\ImageCreator.psm1"
 
 $textToImage = Get-TextToImage $hFilePath $gFilePath $outputImagePath
-#$textToImage.main()
+$textToImage.main()
 
 Write-Output "Tudo certo"

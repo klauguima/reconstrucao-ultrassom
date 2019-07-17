@@ -39,27 +39,27 @@
         [System.Collections.ArrayList]$rMatrix=$this.gMatrix
         
         ## Fórmula: p0 = HTr0
-        [System.Collections.ArrayList]$pMatrix=$matrixUtil.transposeAndMultiply($this.hMatrix, $rMatrix)
+        [System.Collections.ArrayList]$pMatrix=$matrixUtil.matrixMultTranpose($this.hMatrix, $rMatrix)
         
         ## Fórmula: riT * ri
-		$rtXr = [float]($matrixUtil.transposeAndMultiply($rMatrix, $rMatrix))[0][0];
+		$rtXr = [float]($matrixUtil.matrixMultTranpose($rMatrix, $rMatrix))[0][0];
 
         $alpha = 0
         $beta = 0
         Write-Verbose -Message "Iniciando convergencia" -Verbose
-        for($i = 0; $i -lt 15; $i++) {
+        for($i = 0; $i -lt 3; $i++) {
             Write-Verbose -Message "parte 1" -Verbose
-		    $alpha = $rtXr / [float]($matrixUtil.transposeAndMultiply($pMatrix, $pMatrix))[0][0];# ai = riT * ri / piT * pi
+		    $alpha = $rtXr / [float]($matrixUtil.matrixMultTranpose($pMatrix, $pMatrix))[0][0];# ai = riT * ri / piT * pi
             Write-Verbose -Message "parte 2" -Verbose
 		    $fMatrix = $matrixUtil.sum($fMatrix, $matrixUtil.multiplyScalar($pMatrix, $alpha));# fi+1 = fi + ai * pi
             Write-Verbose -Message "parte 3" -Verbose
 		    $ri = $matrixUtil.subtract($rMatrix, $matrixUtil.multiply($matrixUtil.multiplyScalar($this.hMatrix, $alpha),$pMatrix));# ri+1 = ri - ai * H * pi
             Write-Verbose -Message "parte 4" -Verbose
-		    $ritXri = [float]($matrixUtil.transposeAndMultiply($ri, $ri))[0][0];# =ri+1T * ri+1
+		    $ritXri = [float]($matrixUtil.matrixMultTranpose($ri, $ri))[0][0];# =ri+1T * ri+1
             Write-Verbose -Message "parte 5" -Verbose
 		    $beta = $ritXri / $rtXr; # Bi = ri+1T * ri+1 / riT * ri
             Write-Verbose -Message "parte 6" -Verbose
-		    $pMatrix = $matrixUtil.sum($matrixUtil.transposeAndMultiply($this.hMatrix, $ri), $matrixUtil.multiplyScalar($pMatrix, $beta));# pi = HT * ri+1 + Bi * pi
+		    $pMatrix = $matrixUtil.sum($matrixUtil.matrixMultTranpose($this.hMatrix, $ri), $matrixUtil.multiplyScalar($pMatrix, $beta));# pi = HT * ri+1 + Bi * pi
             Write-Verbose -Message "parte 7" -Verbose
 		    $rMatrix = $ri;# ri = ri+1
             Write-Verbose -Message "parte 8" -Verbose
