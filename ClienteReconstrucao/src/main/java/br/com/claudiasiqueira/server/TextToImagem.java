@@ -1,5 +1,6 @@
 package br.com.claudiasiqueira.server;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -76,7 +77,8 @@ public class TextToImagem {
 		/**
 		 * Fórmula: r0 = g - Hf0
 		 */
-		FloatMatrix rMatrix = gMatrix;
+//		FloatMatrix rMatrix = gMatrix;
+		FloatMatrix rMatrix = hMatrix.mmul(fMatrix).rsub(gMatrix);
 		
 		/**
 		 * Fórmula: p0 = HTr0
@@ -125,7 +127,7 @@ public class TextToImagem {
 		for (int i = 0; i < 60; i++) {
 			for (int j = 0; j < 60; j++) {
 				int value = (int) ((255 / (max - min)) * (matrix.get(k, 0) - min));
-				theImage.setRGB(i, j, value);
+				theImage.setRGB(i, j, new Color(value, value, value).getRGB());
 				k++;
 			}
 		}
