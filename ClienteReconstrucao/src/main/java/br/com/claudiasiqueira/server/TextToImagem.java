@@ -94,14 +94,15 @@ public class TextToImagem {
 		for (int i = 0; i < 15; i++) {
 			alpha = rtXr / pMatrix.transpose().mmul(pMatrix).get(0, 0); // ai = riT * ri / piT * pi
 			fMatrix = pMatrix.mmul(alpha).add(fMatrix);// fi+1 = fi + ai * pi
-//			ri = rMatrix.rsub(hMatrix.mmul(pMatrix).mmul(alpha)); //ri+1 = ri - ai * H * pi
 			ri = hMatrix.mmul(pMatrix).mmul(alpha).rsub(rMatrix);// ri+1 = ri - ai * H * pi
 			ritXri = ri.transpose().mmul(ri).get(0, 0);// =ri+1T * ri+1
 			beta = ritXri / rtXr;// Bi = ri+1T * ri+1 / riT * ri
 			pMatrix = hMatrixTransp.mmul(ri).add(pMatrix.mmul(beta));// pi = HT * ri+1 + Bi * pi
 			rMatrix = ri;// ri = ri+1
 			rtXr = ritXri;
-			System.out.println(rMatrix.	norm2());
+
+//			float norm2 = rMatrix.norm2();
+			numeroIteracoes++;
 		}
 		return fMatrix;
 	}
@@ -147,4 +148,9 @@ public class TextToImagem {
 	public void setImagemDestino(String imagemDestino) {
 		this.imagemDestino = imagemDestino;
 	}
+
+	public int getNumeroIteracoes() {
+		return numeroIteracoes;
+	}
+
 }

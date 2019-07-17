@@ -43,7 +43,7 @@ public class ReconstrucaoController {
 			retorno.put("dtHoraInicio", dtHoraInicio);
 			retorno.put("dtHoraFim", dtHoraFim);
 			retorno.put("tamPixels", tamPixels);
-			retorno.put("numIteracoes", 15);
+			retorno.put("numIteracoes", textToImagem.getNumeroIteracoes());
 			retorno.put("caminhoImagem", tempPathImage);
 		} catch (Exception e) {
 			e.printStackTrace();
