@@ -13,17 +13,18 @@ import org.jblas.FloatMatrix;
 
 public class TextToImagem {
 
-	Integer rowsH = 50816;
-	Integer columnsH = 3600;
+	private static Integer rowsH = 50816;
+	private static Integer columnsH = 3600;
 	Integer rowsG = 50816;
 	Integer columnsG = 1;
 	
-	private FloatMatrix hMatrix = new FloatMatrix(rowsH, columnsH);
+	private static FloatMatrix hMatrix = null;
 	private FloatMatrix gMatrix = new FloatMatrix(rowsG, columnsG);
 
 	private String caminhoArquivoG = "C:\\Users\\Kleber\\Documents\\projetos\\claudia-faculdade\\Imagem\\g-2.txt";
 	private String caminhoArquivoH = "C:\\Users\\Kleber\\Documents\\projetos\\claudia-faculdade\\Imagem\\H-1.txt";
 	private String imagemDestino = "C:\\Users\\Kleber\\Documents\\projetos\\claudia-faculdade\\Imagem\\imagemResultado3.jpg";
+	private int numeroIteracoes = 0;
 
 	public void criaImagem() throws Exception {
 		System.out.println("iniciou");
@@ -46,6 +47,12 @@ public class TextToImagem {
 	}
 
 	private void readHFile() throws FileNotFoundException, IOException {
+		if(hMatrix != null) {
+			System.out.println("Obteve arquivo H da memória");
+			return;
+		}
+		TextToImagem.hMatrix = new FloatMatrix(TextToImagem.rowsH, TextToImagem.columnsH);
+				
 		BufferedReader bufferH = new BufferedReader(new FileReader(caminhoArquivoH));
 		System.out.println("Lendo arquivo H");
 		for (int i = 0; i < rowsH; i++) {
@@ -87,13 +94,14 @@ public class TextToImagem {
 		for (int i = 0; i < 15; i++) {
 			alpha = rtXr / pMatrix.transpose().mmul(pMatrix).get(0, 0); // ai = riT * ri / piT * pi
 			fMatrix = pMatrix.mmul(alpha).add(fMatrix);// fi+1 = fi + ai * pi
-			ri = rMatrix.rsub(hMatrix.mmul(pMatrix).mmul(alpha)); //ri+1 = ri - ai * H * pi
-//			ri = hMatrix.mmul(pMatrix).mmul(alpha).rsub(rMatrix);// ri+1 = ri - ai * H * pi
+//			ri = rMatrix.rsub(hMatrix.mmul(pMatrix).mmul(alpha)); //ri+1 = ri - ai * H * pi
+			ri = hMatrix.mmul(pMatrix).mmul(alpha).rsub(rMatrix);// ri+1 = ri - ai * H * pi
 			ritXri = ri.transpose().mmul(ri).get(0, 0);// =ri+1T * ri+1
 			beta = ritXri / rtXr;// Bi = ri+1T * ri+1 / riT * ri
 			pMatrix = hMatrixTransp.mmul(ri).add(pMatrix.mmul(beta));// pi = HT * ri+1 + Bi * pi
 			rMatrix = ri;// ri = ri+1
 			rtXr = ritXri;
+			System.out.println(rMatrix.	norm2());
 		}
 		return fMatrix;
 	}

@@ -1,3 +1,7 @@
 .custom-file-label::after {
 	content: "Selecionar";
 }
+
+#ajaxLoading img {
+	margin-top: 100px;
+}
